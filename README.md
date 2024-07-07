@@ -2,9 +2,9 @@
 -Program to solve any sudoku
 
 # Personal Goals
---Use C++ to create an actual project instead of Competitive Programming
---Learn new things about C++
---Have fun!
+--Use C++ to create an actual project instead of Competitive Programming<br>
+--Learn new things about C++<br>
+--Have fun!<br>
 
 # Project Goals
 1. Implement Basic I\O
