@@ -38,7 +38,7 @@ void main_screen(int (&sudoku)[10][10]) {
 }
 
 bool is_valid(int (&sudoku)[10][10]) {
-    bool numbers[10], numbers_x[10], numbers_y[10], valid = true;
+    bool numbers[10], numbers_x[10], numbers_y[10];
 
     for(int k = 1; k <= 9; ++k) { //Check if there's double in the same box
         for(int i = 3*((k-1)/3) + 1; i <= 3 + 3*((k-1)/3); ++i) {
@@ -79,7 +79,36 @@ bool is_valid(int (&sudoku)[10][10]) {
         }
     }
     
-    return valid;
+    return true;
+}
+
+bool is_pos_valid(int x, int y, int val, int (&sudoku)[10][10]) {
+    int num = val;
+    bool numbers_x[10], numbers_y[10], numbers_xy[10];
+    numbers_x[num] = numbers_y[num] = numbers_xy[num] = true;
+
+    for(int i = 1; i <= 9; ++i) {
+        if(sudoku[i][y] != 0 && !numbers_x[sudoku[i][y]])
+            numbers_x[sudoku[i][y]] = true;
+        else
+            return false;
+        
+        if(sudoku[x][i] != 0 && !numbers_y[sudoku[x][i]])
+            numbers_y[sudoku[i][y]] = true;
+        else
+            return false;
+    }
+
+    for(int i = 3 * (y/3); i <= 3 * (y/3) + 3; ++i) {
+        for(int j = 3 * (x/3); j <= 3 * (x/3) + 3; ++j) {
+            if(sudoku[i][y] != 0 && !numbers_xy[sudoku[i][y]])
+                numbers_x[sudoku[i][j]] = true;
+            else
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void print_sudoku(int (&sudoku)[10][10]) {
@@ -110,8 +139,23 @@ void enter_sudoku(int (&sudoku)[10][10]) {
             print_sudoku(sudoku);
         }
     }
+    solve_sudoku(sudoku);
 }
 
-void solve_sudoku(int (&sudoku)[10][10]) {
-    return;
+bool solve_sudoku(int (&sudoku)[10][10]) {
+    for(int i = 1; i <= 9; ++i) {
+        for(int j = 1; j <= 9; ++j) {
+            if(sudoku[i][j] == 0) {
+                for(int k = 1; k <= 9; ++k) {
+                    if(is_pos_valid(i, j, k, sudoku))
+                        sudoku[i][j] = k;
+                        if(solve_sudoku(sudoku))
+                            return true;
+                        sudoku[i][j] = 0;
+                } 
+                return false;
+            }
+        }
+    }
+    return true;
 }

@@ -3,6 +3,7 @@
 
 //My header files
 #include "functions.h"
+#include "misc.h"
 
 //Variables needed
 
@@ -22,5 +23,7 @@ int sudoku[10][10] = {
 int main()
 {
     main_screen(sudoku);
+    clear_screen();
+    print_sudoku(sudoku);
     return 0;
 }
