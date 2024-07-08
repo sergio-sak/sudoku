@@ -9,6 +9,6 @@
 # Project Goals
 - [x] Implement Basic I\O
 - [x] Check if valid
-- [ ] Do some research on the algorithm to solve (I'm thinking of backtracking, similar to N-queens. Would probably be very slow though.)
+- [x] Do some research on the algorithm to solve (I'm thinking of backtracking, similar to N-queens. Would probably be very slow though.)
 - [ ] Finish the project
 - [ ] Potentially add a UI using SFML

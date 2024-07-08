@@ -3,7 +3,7 @@
 #include "functions.h"
 #include "misc.h"
 
-void main_screen(int (&sudoku)[10][10]) {
+bool main_screen(int (&sudoku)[10][10]) {
     std::cout << " ____            _       _            ____        _\n";
     std::cout << "/ ___| _   _  __| | ___ | | ___   _  / ___|  ___ | |_   _____ _ __\n";
     std::cout << "\\___ \\| | | |/ _` |/ _ \\| |/ / | | | \\___ \\ / _ \\| \\ \\ / / _ \\ '__|\n";
@@ -23,9 +23,9 @@ void main_screen(int (&sudoku)[10][10]) {
     clear_screen();
 
     if(choice == 1)
-        enter_sudoku(sudoku);
+        return enter_sudoku(sudoku);
     else if(choice == 2)
-        solve_sudoku(sudoku);
+        return solve_sudoku(1, 1, sudoku);
     else {
         clear_screen();
         std::cout << " ____             _\n";
@@ -34,7 +34,9 @@ void main_screen(int (&sudoku)[10][10]) {
         std::cout << "| |_) | |_| |  __/_|\n";
         std::cout << "|____/ \\__, |\\___(_)\n";
         std::cout << "       |___/\n";
+        exit(0);
     }
+    return true;
 }
 
 bool is_valid(int (&sudoku)[10][10]) {
@@ -56,55 +58,45 @@ bool is_valid(int (&sudoku)[10][10]) {
         }
     }
 
-    for(int k = 1; k <= 9; ++k) { //Check if there's double in the same row/column
-        for(int i = k; i <= 8 + k; ++i) {
-            for(int j = k; j <= 8 + k; ++j) {
-                if(sudoku[i][j] != 0) {
-                    if(!numbers_x[sudoku[i][j]])
-                        numbers_x[sudoku[i][j]] = true;
-                    else
-                        return false;
-                }
+    for(int i = 1; i <= 9; ++i) {
+        for(int j = 1; j <= 9; ++j) {
+            if(sudoku[i][j] != 0) {
+                if(!numbers_x[sudoku[i][j]])
+                    numbers_x[sudoku[i][j]] = true;
+                else
+                    return false;
+            }
 
-                if(sudoku[j][i] != 0) {
-                    if(!numbers_y[sudoku[j][i]])
-                        numbers_y[sudoku[j][i]] = true;
-                    else
-                        return false;
-                }
+            if(sudoku[j][i] != 0) {
+                if(!numbers_y[sudoku[j][i]])
+                    numbers_y[sudoku[j][i]] = true;
+                else
+                    return false;
             }
         }
         for(int i = 0; i <= 9; ++i) {
             numbers_x[i] = numbers_y[i] = false;
         }
     }
+
     
     return true;
 }
 
-bool is_pos_valid(int x, int y, int val, int (&sudoku)[10][10]) {
-    int num = val;
-    bool numbers_x[10], numbers_y[10], numbers_xy[10];
-    numbers_x[num] = numbers_y[num] = numbers_xy[num] = true;
-
+bool is_pos_valid(int row, int col, int val, int (&sudoku)[10][10]) {
     for(int i = 1; i <= 9; ++i) {
-        if(sudoku[i][y] != 0 && !numbers_x[sudoku[i][y]])
-            numbers_x[sudoku[i][y]] = true;
-        else
+        if(sudoku[row][i] == val){
             return false;
-        
-        if(sudoku[x][i] != 0 && !numbers_y[sudoku[x][i]])
-            numbers_y[sudoku[i][y]] = true;
-        else
+        }
+
+        if(sudoku[i][col] == val)
             return false;
     }
 
-    for(int i = 3 * (y/3); i <= 3 * (y/3) + 3; ++i) {
-        for(int j = 3 * (x/3); j <= 3 * (x/3) + 3; ++j) {
-            if(sudoku[i][y] != 0 && !numbers_xy[sudoku[i][y]])
-                numbers_x[sudoku[i][j]] = true;
-            else
-            return false;
+    for(int i = 1; i <= 3; ++i) {
+        for(int j = 1; j <= 3; ++j) {
+            if(sudoku[i + (row - row % 3)][j + (col - col % 3)] == val)
+                return false;
         }
     }
 
@@ -112,7 +104,6 @@ bool is_pos_valid(int x, int y, int val, int (&sudoku)[10][10]) {
 }
 
 void print_sudoku(int (&sudoku)[10][10]) {
-    clear_screen();
     std::cout<<"_________________________________________\n";
     for(int i = 1; i <= 9; ++i) {
         for(int j = 1; j <= 9; ++j) {
@@ -128,7 +119,7 @@ void print_sudoku(int (&sudoku)[10][10]) {
     }
 }
 
-void enter_sudoku(int (&sudoku)[10][10]) {
+bool enter_sudoku(int (&sudoku)[10][10]) {
     int num;
     std::cout<<"Enter sudoku, must press enter after every number. Warning, it's going to be 81 numbers:()\n";
 
@@ -139,23 +130,31 @@ void enter_sudoku(int (&sudoku)[10][10]) {
             print_sudoku(sudoku);
         }
     }
-    solve_sudoku(sudoku);
+    return solve_sudoku(1, 1, sudoku);
 }
 
-bool solve_sudoku(int (&sudoku)[10][10]) {
-    for(int i = 1; i <= 9; ++i) {
-        for(int j = 1; j <= 9; ++j) {
-            if(sudoku[i][j] == 0) {
-                for(int k = 1; k <= 9; ++k) {
-                    if(is_pos_valid(i, j, k, sudoku))
-                        sudoku[i][j] = k;
-                        if(solve_sudoku(sudoku))
-                            return true;
-                        sudoku[i][j] = 0;
-                } 
-                return false;
-            }
-        }
+bool solve_sudoku(int row, int col, int (&sudoku)[10][10]) {
+    if(row == 9 && col == 9)
+        return true;
+    
+    if(col == 9){
+        row++;
+        col = 1;
     }
-    return true;
+
+    if(sudoku[row][col] != 0)
+        return solve_sudoku(row, col + 1, sudoku);
+    
+    for(int i = 1; i <= 9; ++i) {
+        if(is_pos_valid(row, col, i, sudoku)) {
+            sudoku[row][col] = i;
+            
+            if(solve_sudoku(row, col + 1, sudoku))
+                return true;
+        }
+
+        sudoku[row][col] = 0;
+    }
+
+    return false;
 }

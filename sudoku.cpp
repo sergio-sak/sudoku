@@ -22,8 +22,13 @@ int sudoku[10][10] = {
 
 int main()
 {
-    main_screen(sudoku);
-    clear_screen();
-    print_sudoku(sudoku);
+    if(main_screen(sudoku)) {
+        clear_screen();
+        std::cout<<"Answer:\n";
+        print_sudoku(sudoku);
+    } else {
+        std::cout<<"Solution Not Possible!\n";
+    }
+
     return 0;
 }
