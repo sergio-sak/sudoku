@@ -17,7 +17,7 @@ void main_screen(int (&sudoku)[10][10]) {
     std::cout<<"|----------------------------------|\n";
     std::cout<<"|Option 3: Exit                    |\n";
     std::cout<<"------------------------------------\n";
-    
+    std::cout<<"Select option: ";
     int choice;
     std::cin>>choice;
     clear_screen();

@@ -21,7 +21,6 @@ int sudoku[10][10] = {
 
 int main()
 {
-    // main_screen(sudoku);
-    print_sudoku(sudoku);
+    main_screen(sudoku);
     return 0;
 }
