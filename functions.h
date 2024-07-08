@@ -1,5 +1,9 @@
-void main_screen(); // Displays the main screen
+void main_screen(int (&sudoku)[10][10]); // Displays the main screen
 
-void enter_sudoku(int sudoku[9][9]); //Enter the sudoku
+bool is_valid(int (&sudoku)[10][10]); // Function that returns whether or not given sudoku is valid
 
-bool is_valid(int sudoku[9][9]); // Function that returns whether or not given sudoku is valid
+void print_sudoku(int (&sudoku)[10][10]); // Print sudoku
+
+void enter_sudoku(int (&sudoku)[10][10]); // Enter the sudoku
+
+void solve_sudoku(int (&sudoku)[10][10]); // Print sudoku

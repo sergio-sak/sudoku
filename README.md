@@ -7,8 +7,8 @@
 - Have fun!<br>
 
 # Project Goals
-- [ ] Implement Basic I\O
+- [x] Implement Basic I\O
 - [x] Check if valid
 - [ ] Do some research on the algorithm to solve (I'm thinking of backtracking, similar to N-queens. Would probably be very slow though.)
 - [ ] Finish the project
-- [ ]  Potentially add a UI using SFML
+- [ ] Potentially add a UI using SFML

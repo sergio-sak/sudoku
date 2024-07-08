@@ -1,0 +1,1 @@
+void clear_screen(); //Function to easily clear the terminal no matter the OS
